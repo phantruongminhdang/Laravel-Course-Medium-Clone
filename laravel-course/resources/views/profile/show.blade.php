@@ -19,23 +19,24 @@
                             @endforelse
                         </div>
                     </div>
-                    <div x-data="{ isFollowing:{{ $user->isFollowedBy(auth()->user()) ? 'true' : 'false' }} }"
-                        class="w-[320px] border-l px-8">
-                        <x-user-avatar :user="$user" size="w-16 h-16" />
+                    <x-follow-ctr :user="$user">
+                        {{--
+                        <div x-data="{ isFollowing:{{ $user->isFollowedBy(auth()->user()) ? 'true' : 'false' }},
+                        <x-user-avatar :user=" $user" size="w-16 h-16" />
                         {{-- <h2 class="text-2xl font-semibold mb-4">{{ $user->name }}'s Profile</h2> --}}
                         <h3> {{ $user->name }}</h3>
-                        <p class="text-gray-500"> {{ $user->followers()->count() }} followers</p>
+                        <p class="text-gray-500"> <span x-text="followersCount"></span> followers</p>
                         <p> {{ $user->bio }}</p>
                         @if (auth()->user() && auth()->user()->id !== $user->id)
                             <div class="mt-4">
-                                <button class="rounded-full px-4 py-2 text-white"
+                                <button @click="follow()" class="rounded-full px-4 py-2 text-white"
                                     x-text="isFollowing ? 'Unfollow' : 'Follow'"
                                     :class="isFollowing ? 'bg-red-600' : 'bg-emerald-600'">
                                     {{-- Follow --}}
                                 </button>
                             </div>
                         @endif
-                    </div>
+                    </x-follow-ctr>
                 </div>
             </div>
         </div>

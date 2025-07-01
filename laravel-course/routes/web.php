@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicProfileController;
@@ -40,6 +41,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // based on the slug provided in the URL.
     // If the slug does not match any post, it will return a 404 error.
     Route::get('/@{username}/{post:slug}', [PostController::class, 'show'])->name('post.show');
+
+    Route::post('/follow/{user}', [FollowerController::class, 'followOrUnfollow'])->name('follow');
 
 
 });
