@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostCreateRequest;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -27,23 +30,41 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::get();
+        return view('post.create', [
+            'categories' => $categories
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PostCreateRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $image = $data['image'];
+        //unset($data['image']);
+
+        $imagePath = $image->store('posts', 'public');
+        $data['image'] = $imagePath;
+
+        $data['user_id'] = Auth::id();
+        $data['slug'] = Str::slug($data['title']);
+
+        Post::create($data);
+
+        return redirect()->route('dashboard');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show(string $username, Post $post)
     {
-        //
+        return view('post.show', [
+            'post' => $post
+        ]);
     }
 
     /**

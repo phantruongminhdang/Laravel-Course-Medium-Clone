@@ -26,7 +26,16 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $data = $request->validated();
+        $image = $data['image'] ?? null;
+
+        if ($image) {
+            // Store the image and get the path
+            $data['image'] = $image->store('avatars', 'public');
+        }
+
+        //dd($request->user());
+        $request->user()->fill($data);
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
