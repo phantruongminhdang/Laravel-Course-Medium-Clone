@@ -29,6 +29,11 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function claps()
+    {
+        return $this->hasMany(Clap::class);
+    }
+
     public function readTime($wordsPerMinute = 100)
     {
         // Assuming an average reading speed of 100 words per minute
